@@ -1,0 +1,23 @@
+{
+  "artifact": "turbolev-web-v0.9",
+  "status": "REPO_BOOTSTRAP_CANDIDATE",
+  "date": "2026-08-23",
+  "provenance": {
+    "v0.7_zip_sha256": "0b7cb7688e4e1117ce8d08115bf4f1cd848f8641e33f56d10f3f21a2e3570233",
+    "v0.8_zip_sha256": "279dc39e59dfa3afaa6d4824358a9b5abfba445da60a6685c0354af24937a28c"
+  },
+  "verification": {
+    "foundation_contract_smoke": "PASS",
+    "stubbed_typescript_contract": "PASS_ADVISORY_NOT_AUTHORITATIVE",
+    "dependency_install": "NOT_RUN_REGISTRY_UNAVAILABLE_IN_RECOVERY_SESSION",
+    "next_production_build": "PENDING_GITHUB_CI"
+  },
+  "safety": {
+    "production_deploy_executed": false,
+    "production_api_activation": false,
+    "crm_database_connection": false,
+    "real_lead_write": false,
+    "real_order_or_reservation_write": false
+  },
+  "files": []
+}

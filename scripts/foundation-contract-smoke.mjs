@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+const root=process.cwd();
+const requiredFiles=["app/page.tsx","app/vin/page.tsx","app/zapys/page.tsx","app/oformlennia/page.tsx","app/poslugy/[service]/page.tsx","app/sto/hlevakha/page.tsx","app/zapchastyny/[category]/[product]/page.tsx","app/api/vehicle/resolve/route.ts","components/BookingClient.tsx","components/CheckoutClient.tsx","components/GarageClient.tsx","components/ProductFitmentContext.tsx","components/VehicleContextProvider.tsx","components/VehicleIdentityResolver.tsx","lib/vehicle-identity.ts"];
+for(const path of requiredFiles)assert.equal(existsSync(join(root,path)),true,`Missing consolidated foundation file: ${path}`);
+for(const obsolete of ["components/VehicleProvider.tsx","components/VinResolverClient.tsx","components/VehicleHeaderStatus.tsx","lib/vehicle.ts"])assert.equal(existsSync(join(root,obsolete)),false,`Obsolete vehicle-context implementation must stay removed: ${obsolete}`);
+const provider=readFileSync(join(root,"components/VehicleContextProvider.tsx"),"utf8");assert.match(provider,/turbolev.publicVehicleContext.v2/);assert.match(provider,/LEGACY_STORAGE_KEYS/);assert.doesNotMatch(provider,/vinLast6|plateNumber|rawVin|rawPlate/);
+const bff=readFileSync(join(root,"app/api/vehicle/resolve/route.ts"),"utf8");assert.match(bff,/no-store/);assert.match(bff,/PUBLIC_BFF_PENDING_INTEGRATION/);assert.doesNotMatch(bff,/Prisma|prisma|DATABASE_URL|directUrl/);
+const fitment=readFileSync(join(root,"components/ProductFitmentContext.tsx"),"utf8");assert.match(fitment,/authoritative product fitment check/);assert.match(fitment,/Невідоме ≠ сумісне/);
+const booking=readFileSync(join(root,"components/BookingClient.tsx"),"utf8");assert.match(booking,/DEMO: НЕ ВІДПРАВЛЕНО/);assert.match(booking,/без VIN\/держномера/);
+console.log("TURBO LEV storefront foundation contract smoke: PASS");
