@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Generate lockfile and finalize deterministic CI
+      - name: Generate and commit package lock
         shell: bash
         run: |
           set -euo pipefail
@@ -30,29 +30,8 @@ jobs:
             exit 0
           fi
           npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-          python - <<'PY'
-          from pathlib import Path
-          import re
-          path = Path('.github/workflows/ci.yml')
-          text = path.read_text()
-          install_old = 'run: npm install --no-audit --no-fund'
-          if install_old not in text:
-              raise SystemExit('Expected npm install command was not found in ci.yml')
-          text = text.replace(install_old, 'run: npm ci --no-audit --no-fund', 1)
-          text, count = re.subn(
-              r'\n      - name: Capture bootstrap lockfile\n.*?(?=\n      - name: TypeScript)',
-              '',
-              text,
-              count=1,
-              flags=re.S,
-          )
-          if count != 1:
-              raise SystemExit('Expected bootstrap artifact step was not found in ci.yml')
-          path.write_text(text)
-          PY
-          rm .github/workflows/bootstrap-lockfile.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add package-lock.json
           git commit -m "chore(web): pin deterministic dependencies"
           git push origin HEAD:${{ github.head_ref }}
