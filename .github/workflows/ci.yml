@@ -22,14 +22,7 @@ jobs:
       - name: Foundation contract smoke
         run: npm run foundation:smoke
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
-      - name: Capture bootstrap lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: bootstrap-package-lock
-          path: package-lock.json
-          if-no-files-found: error
-          retention-days: 1
+        run: npm ci --no-audit --no-fund
       - name: TypeScript
         run: npm run typecheck
       - name: Next.js production build
