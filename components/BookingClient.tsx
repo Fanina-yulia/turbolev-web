@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useVehicleContext } from "@/components/VehicleContextProvider";
 import {
@@ -64,6 +64,14 @@ export function BookingClient({ serviceLabel, intent, product }: Props) {
       lastFingerprintRef.current = fingerprint;
       idempotencyKeyRef.current = crypto.randomUUID();
     }
+    const idempotencyKey = idempotencyKeyRef.current;
+    if (!idempotencyKey) {
+      setSubmitState({
+        kind: "error",
+        message: "Не вдалося підготувати безпечне повторне надсилання. Оновіть сторінку та спробуйте ще раз.",
+      });
+      return;
+    }
 
     setSubmitState({ kind: "sending" });
     try {
@@ -71,7 +79,7 @@ export function BookingClient({ serviceLabel, intent, product }: Props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Idempotency-Key": idempotencyKeyRef.current,
+          "X-Idempotency-Key": idempotencyKey,
         },
         body: fingerprint,
       });
