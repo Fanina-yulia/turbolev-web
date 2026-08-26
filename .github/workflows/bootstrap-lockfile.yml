@@ -32,24 +32,23 @@ jobs:
           npm install --package-lock-only --ignore-scripts --no-audit --no-fund
           python - <<'PY'
           from pathlib import Path
+          import re
           path = Path('.github/workflows/ci.yml')
           text = path.read_text()
-          old = '''      - name: Install dependencies
-                run: npm install --no-audit --no-fund
-              - name: Capture bootstrap lockfile
-                uses: actions/upload-artifact@v4
-                with:
-                  name: bootstrap-package-lock
-                  path: package-lock.json
-                  if-no-files-found: error
-                  retention-days: 1
-          '''
-          new = '''      - name: Install dependencies
-                run: npm ci --no-audit --no-fund
-          '''
-          if old not in text:
-              raise SystemExit('Expected bootstrap install block was not found in ci.yml')
-          path.write_text(text.replace(old, new))
+          install_old = 'run: npm install --no-audit --no-fund'
+          if install_old not in text:
+              raise SystemExit('Expected npm install command was not found in ci.yml')
+          text = text.replace(install_old, 'run: npm ci --no-audit --no-fund', 1)
+          text, count = re.subn(
+              r'\n      - name: Capture bootstrap lockfile\n.*?(?=\n      - name: TypeScript)',
+              '',
+              text,
+              count=1,
+              flags=re.S,
+          )
+          if count != 1:
+              raise SystemExit('Expected bootstrap artifact step was not found in ci.yml')
+          path.write_text(text)
           PY
           rm .github/workflows/bootstrap-lockfile.yml
           git config user.name "github-actions[bot]"
