@@ -1,2 +1,15 @@
 import type { MetadataRoute } from "next";
-export default function robots(): MetadataRoute.Robots { const base=process.env.NEXT_PUBLIC_SITE_URL??"https://turbolev-web.vercel.app"; return { rules: [{ userAgent: "*", allow: "/", disallow: ["/account/"] }], sitemap: `${base}/sitemap.xml` }; }
+import { seoRouteContract, siteUrl } from "@/lib/seo";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [...seoRouteContract.robotsDisallow],
+      },
+    ],
+    sitemap: `${siteUrl}/sitemap.xml`,
+  };
+}
