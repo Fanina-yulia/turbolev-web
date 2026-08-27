@@ -42,4 +42,5 @@ export const seoRouteContract = {
     "/vin",
   ],
   noindex: ["/account", "/koszyk", "/oformlennia", "/zapys"],
+  robotsDisallow: ["/api/", "/account/"],
 } as const;
