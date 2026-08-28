@@ -23,6 +23,8 @@ jobs:
         run: npm run foundation:smoke
       - name: SEO contract smoke
         run: npm run seo:smoke
+      - name: SEO quality regression
+        run: npm run seo:quality
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Capture bootstrap lockfile
