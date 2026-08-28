@@ -9,7 +9,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "foundation:smoke": "node scripts/foundation-contract-smoke.mjs",
-    "seo:smoke": "node scripts/seo-contract-smoke.mjs"
+    "seo:smoke": "node scripts/seo-contract-smoke.mjs",
+    "seo:quality": "node scripts/seo-quality-regression.mjs"
   },
   "dependencies": { "next": "16.3.0", "react": "19.2.0", "react-dom": "19.2.0" },
   "devDependencies": { "@types/node": "^24.0.0", "@types/react": "^19.2.0", "@types/react-dom": "^19.2.0", "typescript": "^5.9.0" }
