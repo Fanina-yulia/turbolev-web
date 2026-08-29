@@ -21,6 +21,8 @@ jobs:
           node-version: 22
       - name: Foundation contract smoke
         run: npm run foundation:smoke
+      - name: AI orchestrator safety smoke
+        run: npm run ai:smoke
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Capture bootstrap lockfile
