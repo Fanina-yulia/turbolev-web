@@ -11,7 +11,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -34,3 +34,27 @@ jobs:
         run: npm run typecheck
       - name: Next.js production build
         run: npm run build
+      - name: Start production server
+        run: |
+          npm start > /tmp/turbolev-web.log 2>&1 &
+          echo $! > /tmp/turbolev-web.pid
+          for attempt in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/turbolev-web.log
+          exit 1
+      - name: Public performance regression gate
+        env:
+          PERF_BASE_URL: http://127.0.0.1:3000
+        run: npm run perf:gate
+      - name: Upload Lighthouse evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-002-lighthouse-reports
+          path: .lighthouseci/perf-002/*.json
+          if-no-files-found: warn
+          retention-days: 14
