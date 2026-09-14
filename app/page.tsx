@@ -4,8 +4,6 @@ import { VehicleIdentityResolver } from "@/components/VehicleIdentityResolver";
 import { ProductCard } from "@/components/ProductCard";
 import { categories, products } from "@/lib/catalog";
 
-const categoryImages = [1,2,3,4,5,6].map((n) => `/brand/cat${n}.jpg`);
-
 export default function HomePage() {
   return (
     <>
@@ -18,12 +16,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="home-hero">
-        <picture className="home-hero-media" aria-hidden="true">
-          <source media="(prefers-color-scheme: light)" srcSet="/brand/hero-light.jpg" />
-          <img className="hero-img-dark" src="/brand/hero-dark.jpg" alt="" />
-          <img className="hero-img-light" src="/brand/hero-light.jpg" alt="" />
-        </picture>
+      <section className="home-hero" style={{ background: "linear-gradient(135deg,#070b0e 0%,#111a20 58%,#172129 100%)" }}>
         <div className="home-hero-shade" aria-hidden="true" />
         <div className="shell home-hero-inner">
           <div className="home-hero-copy">
@@ -49,9 +42,8 @@ export default function HomePage() {
       <section className="section shell home-categories">
         <div className="section-head"><div><span className="kicker">КАТАЛОГ TURBO LEV</span><h2>ПОПУЛЯРНІ КАТЕГОРІЇ</h2></div><Link href="/zapchastyny">ПЕРЕГЛЯНУТИ ВЕСЬ КАТАЛОГ →</Link></div>
         <div className="home-category-grid">
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <Link className="home-category-card" key={category.slug} href={`/zapchastyny/${category.slug}`}>
-              <img src={categoryImages[index]} alt="" />
               <div className="home-category-body"><span>{category.icon}</span><strong>{category.name}</strong><small>{category.count} позицій</small></div>
             </Link>
           ))}
@@ -81,8 +73,7 @@ export default function HomePage() {
       </section>
 
       <section className="home-station">
-        <div className="shell home-station-box">
-          <picture aria-hidden="true"><img className="station-img-dark" src="/brand/service-dark.jpg" alt=""/><img className="station-img-light" src="/brand/service-light.jpg" alt=""/></picture>
+        <div className="shell home-station-box" style={{ background: "linear-gradient(135deg,#0c1116,#1a242d)" }}>
           <div className="home-station-shade" />
           <div className="home-station-copy"><span>ВСТАНОВЛЕННЯ НА НАШИХ СТО</span><h2>ПРОФЕСІЙНА УСТАНОВКА —<br/>ОДИН МАРШРУТ ДО РЕЗУЛЬТАТУ</h2><ul><li>Діагностика перед встановленням, коли вона потрібна</li><li>Підбір деталі під конкретне авто</li><li>Деталь + робота + історія в TURBO LEV</li></ul><Link href="/sto" className="button button-accent">ЗНАЙТИ НАШЕ СТО</Link></div>
         </div>
