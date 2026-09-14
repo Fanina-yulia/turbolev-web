@@ -11,7 +11,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -34,3 +34,5 @@ jobs:
         run: npm run typecheck
       - name: Next.js production build
         run: npm run build
+      - name: Public performance regression gate
+        run: npm run perf:ci
