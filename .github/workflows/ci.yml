@@ -36,3 +36,11 @@ jobs:
         run: npm run build
       - name: Public performance regression gate
         run: npm run perf:ci
+      - name: Retain Lighthouse evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-ci-reports
+          path: .lighthouseci
+          if-no-files-found: warn
+          retention-days: 7
