@@ -36,6 +36,9 @@ jobs:
         run: npm run build
       - name: Public performance regression gate
         run: npm run perf:ci
+      - name: Print Lighthouse diagnostics
+        if: always()
+        run: node scripts/perf-lighthouse-diagnostics.mjs
       - name: Retain Lighthouse evidence
         if: always()
         uses: actions/upload-artifact@v4
