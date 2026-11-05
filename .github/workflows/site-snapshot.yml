@@ -1,0 +1,25 @@
+name: site-snapshot
+# One-off consolidation: copy the live static site turbolev.net into ./site on branch site-snapshot.
+on:
+  push:
+    branches: [site-snapshot]
+    paths: ['.github/workflows/site-snapshot.yml', 'site-tools/snapshot.mjs']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node site-tools/snapshot.mjs https://turbolev.net site
+      - name: Commit snapshot
+        run: |
+          git config user.name "turbolev-snapshot"
+          git config user.email "noreply@github.com"
+          git add site site-tools/manifest.json
+          git diff --cached --quiet || git commit -m "site: snapshot of live turbolev.net"
+          git push origin HEAD:site-snapshot
